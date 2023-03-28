@@ -1,0 +1,16 @@
+service: global-storage-images-resize
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  iam:
+    role: arn:aws:iam::832626921517:role/lambdaExecuteRole_S3DynamoDB
+
+functions:
+  storage-images-resize:
+    handler: src/functions/storage-images-resize.handler
+    timeout: 30
+    memorySize: 3008
+
