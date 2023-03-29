@@ -6,11 +6,11 @@ provider:
   runtime: nodejs18.x
   region: us-east-1
   iam:
-    role: arn:aws:iam::832626921517:role/lambdaExecuteRole_S3DynamoDB
+    role: arn:aws:iam::832626921517:role/lambdaExecuteRole_Cloudfront_S3_DynamoDB_SSM_KMS
 
 functions:
   storage-images-resize:
     handler: src/functions/storage-images-resize.handler
     timeout: 30
-    memorySize: 3008
+    memorySize: 1536
 
