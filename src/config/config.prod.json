@@ -1,0 +1,3 @@
+{
+    "roleArn": "arn:aws:iam::276307935462:role/lambdaExecuteRole_Cloudfront_S3_DynamoDB_SSM_KMS"
+}

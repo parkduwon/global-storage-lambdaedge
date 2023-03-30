@@ -3,10 +3,10 @@ const sharp = require('sharp');
 const querystring = require('querystring');
 
 const s3Client = new S3Client({region: 'ap-northeast-2'});
-const s3BucketName = 'global-object-storage-dev';
 
 exports.handler = async (event, context, callback) => {
     const {request, response} = event.Records[0].cf;
+    const s3BucketName = request.origin.s3.domainName.split(".")[0]
     let queryParams;
     let objectKey;
 
