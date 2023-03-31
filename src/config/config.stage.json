@@ -1,3 +1,4 @@
 {
-    "roleArn": "arn:aws:iam::610987373192:role/lambdaExecuteRole_Cloudfront_S3_DynamoDB_SSM_KMS"
+    "roleArn": "arn:aws:iam::610987373192:role/lambdaExecuteRole_Cloudfront_S3_DynamoDB_SSM_KMS",
+    "s3DeployBucketName": "marketboro-serverless-deployment-bucket-stage-global"
 }

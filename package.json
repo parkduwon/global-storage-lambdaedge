@@ -16,6 +16,7 @@
     "sharp": "^0.31.3"
   },
   "devDependencies": {
-    "@silvermine/serverless-plugin-cloudfront-lambda-edge": "2.2.3"
+    "@silvermine/serverless-plugin-cloudfront-lambda-edge": "2.2.3",
+    "serverless-deployment-bucket": "^1.6.0"
   }
 }

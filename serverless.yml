@@ -5,12 +5,18 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: us-east-1
+  deploymentBucket:
+    name: ${self:custom.envVar.s3DeployBucketName}
+    serverSideEncryption: aws:kms
+    sseKMSKeyId: alias/aws/s3
   iam:
     role: ${self:custom.envVar.roleArn}
-
 custom:
   stage: ${opt:stage, 'dev'}
   envVar: ${file(./src/config/config.${opt:stage, 'dev'}.json)}
+
+plugins:
+  - serverless-deployment-bucket
 
 functions:
   storage-images-resize:
