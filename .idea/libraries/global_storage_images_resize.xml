@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="global-storage-images-resize">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/.serverless/global-storage-images-resize.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
