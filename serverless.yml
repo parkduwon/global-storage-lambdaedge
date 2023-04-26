@@ -18,6 +18,13 @@ custom:
 plugins:
   - serverless-deployment-bucket
 
+package:
+  patterns:
+    - '!config/**'
+    - '!node_modules/serverless*'
+    - '!node_modules/aws-sdk'
+    - '!README.md'
+
 functions:
   storage-images-resize:
     handler: src/functions/storage-images-resize.handler
