@@ -9,6 +9,7 @@ provider:
     name: ${self:custom.envVar.s3DeployBucketName}
     serverSideEncryption: aws:kms
     sseKMSKeyId: alias/aws/s3
+
   iam:
     role: ${self:custom.envVar.roleArn}
 custom:

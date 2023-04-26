@@ -1,4 +1,5 @@
 {
     "roleArn": "arn:aws:iam::751377257368:role/lambdaExecuteRole_Cloudfront_S3_DynamoDB_SSM_KMS",
-    "s3DeployBucketName": "marketboro-serverless-deployment-bucket-qa-global"
+    "s3DeployBucketName": "marketboro-serverless-deployment-bucket-qa-global",
+    "logRetentionInDays": 1
 }
