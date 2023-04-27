@@ -12,11 +12,14 @@
     "@aws-sdk/client-cloudfront": "^3.299.0",
     "@aws-sdk/client-s3": "^3.298.0",
     "aws-sdk": "^2.1343.0",
+    "glob": "^10.2.2",
     "node": "^19.8.1",
     "sharp": "^0.31.3"
   },
   "devDependencies": {
     "@silvermine/serverless-plugin-cloudfront-lambda-edge": "2.2.3",
-    "serverless-deployment-bucket": "^1.6.0"
+    "serverless-deployment-bucket": "^1.6.0",
+    "serverless-plugin-common-excludes": "^4.0.0",
+    "serverless-plugin-include-dependencies": "^5.1.0"
   }
 }

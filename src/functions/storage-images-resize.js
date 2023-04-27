@@ -97,6 +97,9 @@ exports.handler = async (event, context, callback) => {
         response.statusDescription = statusDescription;
         response.body = body;
         response.headers['content-type'] = contentHeader;
+        response.headers['access-control-allow-origin'] = [{key: 'Access-Control-Allow-Origin', value: '*'}];
+        response.headers['access-control-allow-methods'] = [{key: 'Access-Control-Allow-Methods', value: 'GET, HEAD, OPTIONS'}];
+        response.headers['access-control-allow-headers'] = [{key: 'Access-Control-Allow-Headers', value: 'Authorization, Content-Type, x-amz-date, x-amz-security-token, x-amz-user-agent'}];
         if (bodyEncoding) {
             response.bodyEncoding = bodyEncoding;
         }
