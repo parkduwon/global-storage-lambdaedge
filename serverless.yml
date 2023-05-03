@@ -14,7 +14,7 @@ provider:
   logRetentionInDays: ${self:custom.envVar.logRetentionInDays}
 custom:
   stage: ${opt:stage, 'dev'}
-  envVar: ${file(./src/config/config.${opt:stage, 'dev'}.json)}
+  envVar: ${file(./config/config.${opt:stage, 'dev'}.json)}
 
 plugins:
   - serverless-deployment-bucket
