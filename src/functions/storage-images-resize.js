@@ -11,7 +11,7 @@ exports.handler = async (event, context, callback) => {
     let objectKey;
 
     try {
-        // Parameters are w, h, f, q and indicate width, height, format and quality.
+        // Parameters are w, h, q, webp and indicate width, height, quality and webp convert.
         queryParams = querystring.parse(request.querystring);
         objectKey = request.uri.substring(1);
         console.log('params: ', queryParams);
@@ -96,10 +96,6 @@ exports.handler = async (event, context, callback) => {
         response.status = status;
         response.statusDescription = statusDescription;
         response.body = body;
-        response.headers['content-type'] = contentHeader;
-        response.headers['access-control-allow-origin'] = [{key: 'Access-Control-Allow-Origin', value: '*'}];
-        response.headers['access-control-allow-methods'] = [{key: 'Access-Control-Allow-Methods', value: 'GET, HEAD, OPTIONS'}];
-        response.headers['access-control-allow-headers'] = [{key: 'Access-Control-Allow-Headers', value: 'Authorization, Content-Type, x-amz-date, x-amz-security-token, x-amz-user-agent'}];
         if (bodyEncoding) {
             response.bodyEncoding = bodyEncoding;
         }
