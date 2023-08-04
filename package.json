@@ -4,7 +4,12 @@
   "description": "- aws-marketboro dev - serverless deploy --aws-profile dev_token --stage dev --verbose - serverless deploy function -f functionName --aws-profile dev_token --stage dev --verbose",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "npm install --platform=linux --arch=x64 sharp",
+    "deploy:dev": "serverless deploy --aws-profile dev_token --stage dev --verbose",
+    "deploy:qa": "serverless deploy --aws-profile qa_token --stage qa --verbose",
+    "deploy:stage": "serverless deploy --aws-profile stage_token --stage stage --verbose",
+    "deploy:prod": "serverless deploy --aws-profile prod_token --stage prod --verbose"
   },
   "author": "",
   "license": "ISC",
