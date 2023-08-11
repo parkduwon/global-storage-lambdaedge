@@ -1,30 +1,18 @@
-const {S3Client, GetObjectCommand} = require("@aws-sdk/client-s3");
-const sharp = require('sharp');
 const querystring = require('querystring');
+const {redirectToNotFound, isStatusNotFound} = require('../utils/redirect-to-not-found')
+const {responseUpdate, shouldResizeImage} = require("../utils/response");
+const {getSizeFromQueryParams, resize} = require("../utils/image");
+const {getObjectBuffer} = require('../utils/s3-client')
 
-const s3Client = new S3Client({region: 'ap-northeast-2'});
 
 exports.handler = async (event, context, callback) => {
     const {request, response} = event.Records[0].cf;
-    const s3BucketName = request.origin.s3.domainName.split(".")[0]
     let queryParams;
     let objectKey;
+    let inputBuffer;
+    let convertedBuffer;
 
-    const foodspringNotFoundPageUrl = 'https://globalcf.dev.marketboro.com/error/foodspring/404.html';
-    const marketbomNotFoundPageUrl = 'https://globalcf.dev.marketboro.com/error/marketbom/404.html';
-
-    // 정상이 아닐때 모두 not found로 이동하도록 처리
-    if (response.status !== '200') {
-        response.status = '302';
-        if (response.uri && request.uri.split('/')[1] === 'foodspring') {
-            response.headers.location = [{key: 'Location', value: foodspringNotFoundPageUrl}]
-        } else {
-            response.headers.location = [{key: 'Location', value: marketbomNotFoundPageUrl}];
-        }
-        callback(null, response);
-        return
-    }
-
+    if (isStatusNotFound(response)) return redirectToNotFound(request, response, callback)
 
     try {
         // Parameters are w, h, q, webp and indicate width, height, quality and webp convert.
@@ -38,82 +26,52 @@ exports.handler = async (event, context, callback) => {
         return (error);
     }
 
-    let isOriginResponse = true;
-    if (queryParams.w && queryParams.h) {
-        isOriginResponse = false;
-    }
-    if (queryParams.webp === 'Y') {
-        isOriginResponse = false;
-    }
-
     //false then return origin
-    if (isOriginResponse) {
+    if (!shouldResizeImage(queryParams)) {
         return callback(null, response);
     }
 
-    // Init variables
-    const width = parseInt(queryParams.w, 10) ? parseInt(queryParams.w, 10) : null;
-    const height = parseInt(queryParams.h, 10) ? parseInt(queryParams.h, 10) : null;
-    const quality = parseInt(queryParams.q, 10) ? parseInt(queryParams.q, 10) : 70;
-
-    let contentType;
-    let inputBuffer;
-    let convertedBuffer;
 
     try {
-        const getObjectParams = {Bucket: s3BucketName, Key: objectKey};
-        const inputData = await s3Client.send(new GetObjectCommand(getObjectParams));
-        contentType = inputData.ContentType;
-        inputBuffer = await inputData.Body.transformToByteArray();
+        inputBuffer = await getObjectBuffer(request, objectKey);
     } catch (error) {
         console.error('error from getObjectFromS3: ', error);
-        responseUpdate(
-            404,
-            'Not Found',
-            'The image does not exist.',
-            [{key: 'Content-Type', value: 'text/plain'}],
-        );
-        return callback(null, response);
+        return redirectToNotFound(request, response, callback)
     }
 
+
+    // get resize option from query params
+    const {width, height, quality} = getSizeFromQueryParams(queryParams);
+
     try {
-        convertedBuffer = await sharp(inputBuffer, {animated: true})
-            .resize({width: width, height: height})
-            .webp({effort: 0, quality: quality})
-            .toBuffer();
+        convertedBuffer = await resize(inputBuffer, {width, height, quality})
     } catch (error) {
         console.log(error);
         responseUpdate(
-            500,
-            'Internal Server Error',
-            'Image Convert Fail Error.',
-            [{key: 'Content-Type', value: 'text/plain'}],
+            response,
+            {
+                status: 500,
+                statusDescription: 'Internal Server Error',
+                body: 'Image Convert Fail Error.',
+            },
         );
         return callback(null, response);
     }
 
     // `response.body`가 변경된 경우 1MB 까지만 허용됩니다.
     if (convertedBuffer.byteLength >= 1048576) {
-        console.log('image response body over 1mb: ', convertedBuffer.byteLength)
+        console.warn('image response body over 1mb: ', convertedBuffer.byteLength)
         return callback(null, response);
     }
 
     responseUpdate(
-        200,
-        'OK',
-        convertedBuffer.toString('base64'),
-        [{key: 'Content-Type', value: contentType}],
-        'base64'
+        response,
+        {
+            status: 200,
+            statusDescription: 'OK',
+            body: convertedBuffer.toString('base64'),
+        }
     );
 
     return callback(null, response);
-
-    function responseUpdate(status, statusDescription, body, contentHeader, bodyEncoding = undefined) {
-        response.status = status;
-        response.statusDescription = statusDescription;
-        response.body = body;
-        if (bodyEncoding) {
-            response.bodyEncoding = bodyEncoding;
-        }
-    }
 }
