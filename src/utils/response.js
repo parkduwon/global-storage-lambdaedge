@@ -1,4 +1,4 @@
-exports.responseUpdate = (response, {status, statusDescription, body, bodyEncoding }) => {
+exports.responseUpdate = (response, { status, statusDescription, body, bodyEncoding }) => {
     response.status = status;
     response.statusDescription = statusDescription;
     response.body = body;
@@ -6,10 +6,10 @@ exports.responseUpdate = (response, {status, statusDescription, body, bodyEncodi
         response.bodyEncoding = bodyEncoding;
     }
 
-    return response
-}
+    return response;
+};
 
-const hasSize = (queryParams) => queryParams.w && queryParams.h
-const isWebq = (queryParams) => queryParams.webq === 'Y'
+const hasSize = (queryParams) => queryParams.w && queryParams.h;
+const isWebq = (queryParams) => queryParams.webq === 'Y';
 
-exports.shouldResizeImage = (queryParams) => hasSize(queryParams) || isWebq(queryParams)
+exports.shouldResizeImage = (queryParams) => hasSize(queryParams) || isWebq(queryParams);
