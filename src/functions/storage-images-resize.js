@@ -17,11 +17,9 @@ exports.handler = async (event, context, callback) => {
         // Parameters are w, h, q, webp and indicate width, height, quality and webp convert.
         queryParams = querystring.parse(request.querystring);
         objectKey = request.uri.substring(1);
-        console.log('params: ', queryParams);
-        console.log('objectKey: ', request.uri.substring(1));
     } catch (error) {
         // Extract name and format.
-        console.log(error);
+        console.error(error);
         return error;
     }
 
@@ -43,7 +41,7 @@ exports.handler = async (event, context, callback) => {
     try {
         convertedBuffer = await resize(inputBuffer, { width, height, quality });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         responseUpdate(response, {
             status: 500,
             statusDescription: 'Internal Server Error',
