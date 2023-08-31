@@ -1,4 +1,4 @@
-service: global-storage-images-resize
+service: global-storage-lambdaedge
 frameworkVersion: '3'
 
 provider:
@@ -34,4 +34,6 @@ functions:
     handler: src/functions/storage-images-resize.handler
     timeout: 30
     memorySize: 1536
-
+  storage-not-found-response:
+    handler: src/functions/storage-not-found-response.handler
+    timeout: 30
