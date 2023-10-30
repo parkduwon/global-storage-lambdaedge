@@ -5,6 +5,7 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: us-east-1
+  timeout: 30
   deploymentBucket:
     name: ${self:custom.envVar.s3DeployBucketName}
     serverSideEncryption: aws:kms
@@ -12,14 +13,20 @@ provider:
   iam:
     role: ${self:custom.envVar.roleArn}
   logRetentionInDays: ${self:custom.envVar.logRetentionInDays}
+
 custom:
   stage: ${opt:stage, 'dev'}
   envVar: ${file(./config/config.${opt:stage, 'dev'}.json)}
+  prune:
+    automatic: true
+    includeLayers: true
+    number: 3
 
 plugins:
   - serverless-deployment-bucket
   - serverless-plugin-common-excludes # this should go before serverless-plugin-include-dependencies
   - serverless-plugin-include-dependencies
+  - serverless-prune-versions
 
 package:
   excludeDevDependencies: false
@@ -32,8 +39,6 @@ package:
 functions:
   storage-images-resize:
     handler: src/functions/storage-images-resize.handler
-    timeout: 30
     memorySize: 1536
   storage-not-found-response:
     handler: src/functions/storage-not-found-response.handler
-    timeout: 30
