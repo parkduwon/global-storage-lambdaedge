@@ -3,6 +3,9 @@ frameworkVersion: '3'
 
 provider:
   name: aws
+  stackTags:
+    Product: 'marketboro'
+    Service: 'marketboro-global-storage-lambdaedge'
   runtime: nodejs18.x
   region: us-east-1
   timeout: 30
@@ -27,6 +30,8 @@ plugins:
   - serverless-plugin-common-excludes # this should go before serverless-plugin-include-dependencies
   - serverless-plugin-include-dependencies
   - serverless-prune-versions
+  - serverless-plugin-resource-tagging
+
 
 package:
   excludeDevDependencies: false
@@ -38,7 +43,11 @@ package:
 
 functions:
   storage-images-resize:
+    tags:
+      Resource: 'global-storage-lambdaedge-lambda'
     handler: src/functions/storage-images-resize.handler
     memorySize: 1536
   storage-not-found-response:
+    tags:
+      Resource: 'global-storage-lambdaedge-lambda'
     handler: src/functions/storage-not-found-response.handler
