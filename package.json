@@ -35,6 +35,7 @@
     "serverless-deployment-bucket": "^1.6.0",
     "serverless-plugin-common-excludes": "^4.0.0",
     "serverless-plugin-include-dependencies": "^5.1.0",
+    "serverless-plugin-resource-tagging": "^1.2.0",
     "serverless-prune-versions": "^1.0.4"
   }
 }
